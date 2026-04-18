@@ -1,0 +1,27 @@
+services:
+  backend:
+    build: ./Backend
+    ports:
+      - "5044:8080"
+    volumes:
+      - ./Backend/Data:/app/Data
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - PythonEngine__Url=http://python-engine:8000
+
+  python-engine:
+    build: ./PythonEngine
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./PythonEngine/analysis_logs.txt:/app/analysis_logs.txt
+      - ./PythonEngine/watch_list.csv:/app/watch_list.csv
+    environment:
+      - BACKEND_URL=http://backend:8080
+
+  frontend:
+    build: ./Frontend
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend

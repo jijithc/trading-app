@@ -1,0 +1,14 @@
+﻿MSBuild version 17.9.8+b34f75857 for .NET
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+C:\Users\lenovo\.gemini\antigravity\scratch\TradingApp\backend\Services\BrokerService.cs(53,9): error CS0106: The modifier 'public' is not valid for this item [C:\Users\lenovo\.gemini\antigravity\scratch\TradingApp\backend\TradingApp.Api.csproj]
+C:\Users\lenovo\.gemini\antigravity\scratch\TradingApp\backend\Services\BrokerService.cs(69,2): error CS1513: } expected [C:\Users\lenovo\.gemini\antigravity\scratch\TradingApp\backend\TradingApp.Api.csproj]
+
+Build FAILED.
+
+C:\Users\lenovo\.gemini\antigravity\scratch\TradingApp\backend\Services\BrokerService.cs(53,9): error CS0106: The modifier 'public' is not valid for this item [C:\Users\lenovo\.gemini\antigravity\scratch\TradingApp\backend\TradingApp.Api.csproj]
+C:\Users\lenovo\.gemini\antigravity\scratch\TradingApp\backend\Services\BrokerService.cs(69,2): error CS1513: } expected [C:\Users\lenovo\.gemini\antigravity\scratch\TradingApp\backend\TradingApp.Api.csproj]
+    0 Warning(s)
+    2 Error(s)
+
+Time Elapsed 00:00:01.63

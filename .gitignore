@@ -1,0 +1,20 @@
+# Visual Studio
+.vs/
+bin/
+obj/
+
+# Node
+node_modules/
+dist/
+build/
+
+# Python
+__pycache__/
+.venv/
+
+# Env files
+.env
+
+# OS files
+.DS_Store
+Thumbs.db
