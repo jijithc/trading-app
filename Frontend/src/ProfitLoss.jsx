@@ -88,27 +88,31 @@ export default function ProfitLoss() {
 
   return (
     <div className="container" style={{ maxWidth: '1000px', margin: '40px auto' }}>
-      <div className="glass-panel" style={{ marginBottom: '40px', textAlign: 'center' }}>
-        <h2 className="title" style={{ fontSize: '1.5rem', marginBottom: '8px' }}>Net Realized Profit & Loss</h2>
+      <div className="glass-panel" style={{ marginBottom: '40px', textAlign: 'center', padding: '24px' }}>
+        <h2 className="title" style={{ fontSize: '1.2rem', marginBottom: '16px', opacity: 0.8 }}>Net Realized Profit & Loss</h2>
         <div style={{ 
-          fontSize: '3.5rem', 
+          fontSize: '3rem', 
           fontWeight: '700', 
           color: isNetProfit ? 'var(--success)' : 'var(--danger)',
           display: 'flex',
+          flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'center',
-          gap: '12px'
+          gap: '8px',
+          flexWrap: 'wrap'
         }}>
-          {isNetProfit ? <ArrowUpRight size={48} /> : <ArrowDownRight size={48} />}
-          {isNetProfit ? '+' : ''}
-          <span style={{ fontSize: '1.5rem', color: 'var(--text-secondary)', marginRight: '4px' }}>INR</span>
-          {totalPnL.toFixed(2)}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            {isNetProfit ? <ArrowUpRight size={32} /> : <ArrowDownRight size={32} />}
+            {isNetProfit ? '+' : ''}
+            <span style={{ fontSize: '1.2rem', color: 'var(--text-secondary)', marginRight: '4px', alignSelf: 'center' }}>INR</span>
+            {totalPnL.toFixed(2)}
+          </div>
         </div>
-        <p style={{ color: 'var(--text-secondary)', marginTop: '8px' }}>Based on historical closed position execution data.</p>
+        <p style={{ color: 'var(--text-secondary)', marginTop: '16px', fontSize: '0.85rem' }}>Based on historical closed position execution data.</p>
       </div>
 
       <div className="glass-panel">
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', flexWrap: 'wrap', gap: '16px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <PieChart color="var(--accent)" />
             <h3 className="subtitle" style={{ margin: 0 }}>Realized P&L By Asset</h3>
@@ -135,11 +139,11 @@ export default function ProfitLoss() {
         
         {paginatedData.length === 0 ? (
           <p style={{ color: 'var(--text-secondary)', padding: '20px', textAlign: 'center' }}>
-            No completely finished round-trip trades ({filter.toLowerCase()}) exist yet.
+            No trades ({filter.toLowerCase()}) found.
           </p>
         ) : (
           <>
-            <div className="table-responsive">
+            <div className="desktop-only table-responsive">
               <table className="table">
                 <thead>
                   <tr>
@@ -172,26 +176,52 @@ export default function ProfitLoss() {
               </table>
             </div>
 
-            {totalPages > 1 && (
-              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '12px', marginTop: '20px', padding: '10px' }}>
-                <button 
-                  disabled={currentPage === 1}
-                  onClick={() => setCurrentPage(prev => prev - 1)}
-                  className="btn"
-                  style={{ padding: '4px 12px', fontSize: '0.875rem', opacity: currentPage === 1 ? 0.5 : 1 }}
-                >Prev</button>
-                <span style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
-                  Page <span style={{ color: 'var(--text-main)', fontWeight: '600' }}>{currentPage}</span> of {totalPages}
-                </span>
-                <button 
-                  disabled={currentPage === totalPages}
-                  onClick={() => setCurrentPage(prev => prev + 1)}
-                  className="btn"
-                  style={{ padding: '4px 12px', fontSize: '0.875rem', opacity: currentPage === totalPages ? 0.5 : 1 }}
-                >Next</button>
-              </div>
-            )}
+            <div className="mobile-only card-view">
+              {paginatedData.map((item, idx) => {
+                const isProfit = item.realizedPnL >= 0;
+                return (
+                  <div key={idx} className="mobile-table-card">
+                    <div className="card-row">
+                      <span style={{ fontWeight: 'bold', fontSize: '1.1rem', color: 'var(--accent)' }}>{item.symbol}</span>
+                      <div style={{ textAlign: 'right' }}>
+                        <span className="label">Qty:</span> <span className="value">{item.totalSold}</span>
+                      </div>
+                    </div>
+                    <div className="card-row" style={{ marginTop: '12px', borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '12px' }}>
+                      <span className="label">Realized Return</span>
+                      <div style={{ 
+                          fontWeight: '700', 
+                          color: isProfit ? 'var(--success)' : 'var(--danger)',
+                          fontSize: '1.1rem'
+                        }}>
+                          {isProfit ? '+' : ''}₹{item.realizedPnL.toFixed(2)}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           </>
+        )}
+
+        {totalPages > 1 && (
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '12px', marginTop: '20px', padding: '10px' }}>
+            <button 
+              disabled={currentPage === 1}
+              onClick={() => setCurrentPage(prev => prev - 1)}
+              className="btn"
+              style={{ padding: '4px 12px', fontSize: '0.875rem', opacity: currentPage === 1 ? 0.5 : 1 }}
+            >Prev</button>
+            <span style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
+              Page <span style={{ color: 'var(--text-main)', fontWeight: '600' }}>{currentPage}</span> of {totalPages}
+            </span>
+            <button 
+              disabled={currentPage === totalPages}
+              onClick={() => setCurrentPage(prev => prev + 1)}
+              className="btn"
+              style={{ padding: '4px 12px', fontSize: '0.875rem', opacity: currentPage === totalPages ? 0.5 : 1 }}
+            >Next</button>
+          </div>
         )}
       </div>
     </div>

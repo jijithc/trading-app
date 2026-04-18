@@ -158,120 +158,174 @@ export default function Orders() {
         </div>
       </div>
 
-      <div className="glass-panel" style={{ padding: 0, overflow: 'hidden' }}>
-        <table className="table" style={{ margin: 0, tableLayout: 'fixed', width: '100%' }}>
-          <thead>
-            <tr>
-              <th style={{ width: '110px' }}>Time</th>
-              <th style={{ width: '180px' }}>Symbol</th>
-              <th style={{ width: '150px' }}>Strategy</th>
-              <th style={{ width: '110px' }}>Type</th>
-              <th style={{ width: '80px', textAlign: 'right' }}>Qty</th>
-              <th style={{ width: '110px', textAlign: 'right' }}>Price</th>
-              <th style={{ width: '130px', textAlign: 'right' }}>Total</th>
-              <th style={{ width: '110px', textAlign: 'center' }}>Conf</th>
-              <th style={{ width: '170px', textAlign: 'center' }}>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {orders.length === 0 ? (
+      <div className="glass-panel" style={{ padding: 0, overflow: 'hidden', background: 'transparent', border: 'none' }}>
+        <div className="desktop-only glass-panel" style={{ padding: 0, overflow: 'hidden' }}>
+          <table className="table" style={{ margin: 0, tableLayout: 'fixed', width: '100%' }}>
+            <thead>
               <tr>
-                <td colSpan="9" style={{ textAlign: 'center', padding: '60px', color: 'var(--text-secondary)' }}>
-                  No orders found. Start trading to see orders here.
-                </td>
+                <th style={{ width: '110px' }}>Time</th>
+                <th style={{ width: '180px' }}>Symbol</th>
+                <th style={{ width: '150px' }}>Strategy</th>
+                <th style={{ width: '110px' }}>Type</th>
+                <th style={{ width: '80px', textAlign: 'right' }}>Qty</th>
+                <th style={{ width: '110px', textAlign: 'right' }}>Price</th>
+                <th style={{ width: '130px', textAlign: 'right' }}>Total</th>
+                <th style={{ width: '110px', textAlign: 'center' }}>Conf</th>
+                <th style={{ width: '170px', textAlign: 'center' }}>Status</th>
               </tr>
-            ) : (
-              orders
-                .filter(o => (statusFilter === 'All' || o.status === statusFilter) && o.confidence >= minConfidence)
-                .map((order, idx) => (
-                <tr key={order.id || idx}>
-                  <td style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-                    {(() => {
-                      const d = new Date(order.date);
-                      const now = new Date();
-                      const isToday = d.getDate() === now.getDate() && 
-                                      d.getMonth() === now.getMonth() && 
-                                      d.getFullYear() === now.getFullYear();
-                      
-                      const timeStr = d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
-                      const parts = timeStr.split(' ');
-                      const time = parts[0];
-                      const ampm = parts[1] || '';
-                      
-                      return (
-                        <>
-                          <div style={{ color: 'white', fontWeight: 'bold' }}>
-                            {time} <span style={{ fontSize: '0.65rem', fontWeight: '400', opacity: 0.7, textTransform: 'uppercase' }}>{ampm}</span>
-                          </div>
-                          <div style={{ fontSize: '0.75rem', opacity: 0.8 }}>
-                            {isToday ? 'Today' : d.toLocaleDateString()}
-                          </div>
-                        </>
-                      );
-                    })()}
-                  </td>
-                  <td style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>{order.symbol}</td>
-                  <td style={{ fontSize: '0.85rem' }}>
-                    {order.strategyName ? (
-                      <span style={{ 
-                        background: 'rgba(139, 92, 246, 0.2)', 
-                        color: '#c4b5fd', 
-                        padding: '4px 8px', 
-                        borderRadius: '4px', 
-                        border: '1px solid #8b5cf6',
-                        display: 'inline-block',
-                        maxWidth: '130px',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                        whiteSpace: 'nowrap'
-                      }} title={order.strategyName}>
-                        {order.strategyName}
-                      </span>
-                    ) : (
-                      <span style={{ color: 'var(--text-secondary)', opacity: 0.7 }}>Manual</span>
-                    )}
-                  </td>
-                  <td>
-                    <span style={{
-                      color: order.type === 'Buy' ? 'var(--success)' : 'var(--danger)',
-                      fontWeight: '800'
-                    }}>
-                      {order.type?.toUpperCase()}
-                    </span>
-                  </td>
-                  <td style={{ textAlign: 'right', fontWeight: 'bold' }}>{order.quantity}</td>
-                  <td style={{ textAlign: 'right', fontWeight: 'bold' }}>₹{order.price?.toFixed(2)}</td>
-                  <td style={{ textAlign: 'right', fontWeight: 'bold', color: 'var(--accent)' }}>
-                    ₹{(order.price * order.quantity).toLocaleString()}
-                  </td>
-                  <td style={{ textAlign: 'center' }}>
-                    <div style={{
-                      display: 'inline-block',
-                      width: '45px',
-                      height: '45px',
-                      borderRadius: '50%',
-                      border: `3px solid ${order.confidence >= 85 ? 'var(--success)' : (order.confidence >= 75 ? '#facc15' : 'var(--danger)')}`,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontSize: '0.8rem',
-                      fontWeight: 'bold',
-                      margin: '0 auto',
-                      color: 'white'
-                    }}>
-                      {order.confidence}%
-                    </div>
-                  </td>
-                  <td style={{ textAlign: 'center' }}>
-                    <div style={{ display: 'inline-flex', justifyContent: 'center' }}>
-                      {getStatusBadge(order.status)}
-                    </div>
+            </thead>
+            <tbody>
+              {orders.length === 0 ? (
+                <tr>
+                  <td colSpan="9" style={{ textAlign: 'center', padding: '60px', color: 'var(--text-secondary)' }}>
+                    No orders found.
                   </td>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+              ) : (
+                orders
+                  .filter(o => (statusFilter === 'All' || o.status === statusFilter) && o.confidence >= minConfidence)
+                  .map((order, idx) => (
+                  <tr key={order.id || idx}>
+                    <td style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                      {(() => {
+                        const d = new Date(order.date);
+                        const now = new Date();
+                        const isToday = d.getDate() === now.getDate() && 
+                                        d.getMonth() === now.getMonth() && 
+                                        d.getFullYear() === now.getFullYear();
+                        
+                        const timeStr = d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+                        const parts = timeStr.split(' ');
+                        const time = parts[0];
+                        const ampm = parts[1] || '';
+                        
+                        return (
+                          <>
+                            <div style={{ color: 'white', fontWeight: 'bold' }}>
+                              {time} <span style={{ fontSize: '0.65rem', fontWeight: '400', opacity: 0.7, textTransform: 'uppercase' }}>{ampm}</span>
+                            </div>
+                            <div style={{ fontSize: '0.75rem', opacity: 0.8 }}>
+                              {isToday ? 'Today' : d.toLocaleDateString()}
+                            </div>
+                          </>
+                        );
+                      })()}
+                    </td>
+                    <td style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>{order.symbol}</td>
+                    <td style={{ fontSize: '0.85rem' }}>
+                      {order.strategyName ? (
+                        <span style={{ 
+                          background: 'rgba(139, 92, 246, 0.2)', 
+                          color: '#c4b5fd', 
+                          padding: '4px 8px', 
+                          borderRadius: '4px', 
+                          border: '1px solid #8b5cf6',
+                          display: 'inline-block',
+                          maxWidth: '130px',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap'
+                        }} title={order.strategyName}>
+                          {order.strategyName}
+                        </span>
+                      ) : (
+                        <span style={{ color: 'var(--text-secondary)', opacity: 0.7 }}>Manual</span>
+                      )}
+                    </td>
+                    <td>
+                      <span style={{
+                        color: order.type === 'Buy' ? 'var(--success)' : 'var(--danger)',
+                        fontWeight: '800'
+                      }}>
+                        {order.type?.toUpperCase()}
+                      </span>
+                    </td>
+                    <td style={{ textAlign: 'right', fontWeight: 'bold' }}>{order.quantity}</td>
+                    <td style={{ textAlign: 'right', fontWeight: 'bold' }}>₹{order.price?.toFixed(2)}</td>
+                    <td style={{ textAlign: 'right', fontWeight: 'bold', color: 'var(--accent)' }}>
+                      ₹{(order.price * order.quantity).toLocaleString()}
+                    </td>
+                    <td style={{ textAlign: 'center' }}>
+                      <div style={{
+                        display: 'inline-block',
+                        width: '45px',
+                        height: '45px',
+                        borderRadius: '50%',
+                        border: `3px solid ${order.confidence >= 85 ? 'var(--success)' : (order.confidence >= 75 ? '#facc15' : 'var(--danger)')}`,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontSize: '0.8rem',
+                        fontWeight: 'bold',
+                        margin: '0 auto',
+                        color: 'white'
+                      }}>
+                        {order.confidence}%
+                      </div>
+                    </td>
+                    <td style={{ textAlign: 'center' }}>
+                      <div style={{ display: 'inline-flex', justifyContent: 'center' }}>
+                        {getStatusBadge(order.status)}
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+
+        <div className="mobile-only card-view">
+          {orders
+            .filter(o => (statusFilter === 'All' || o.status === statusFilter) && o.confidence >= minConfidence)
+            .map((order, idx) => (
+            <div key={order.id || idx} className="mobile-table-card">
+              <div className="card-row">
+                <div>
+                  <span style={{ fontWeight: 'bold', fontSize: '1.2rem' }}>{order.symbol}</span>
+                  <span style={{ 
+                    marginLeft: '8px',
+                    color: order.type === 'Buy' ? 'var(--success)' : 'var(--danger)',
+                    fontWeight: '800',
+                    fontSize: '0.8rem'
+                  }}>
+                    {order.type?.toUpperCase()}
+                  </span>
+                </div>
+                <div>
+                  {getStatusBadge(order.status)}
+                </div>
+              </div>
+              
+              <div className="card-row" style={{ marginTop: '12px' }}>
+                <div>
+                  <span className="label">Qty @ Price</span>
+                  <div className="value">{order.quantity} × ₹{order.price?.toFixed(2)}</div>
+                </div>
+                <div style={{ textAlign: 'right' }}>
+                  <span className="label">Total</span>
+                  <div className="value" style={{ color: 'var(--accent)' }}>₹{(order.price * order.quantity).toLocaleString()}</div>
+                </div>
+              </div>
+
+              <div className="card-row" style={{ marginTop: '12px', paddingTop: '12px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+                <div>
+                  <span className="label">Time</span>
+                  <div className="value" style={{ fontSize: '0.8rem' }}>
+                    {new Date(order.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  </div>
+                </div>
+                <div style={{ textAlign: 'right' }}>
+                  <span className="label">Strategy</span>
+                  <div className="value" style={{ fontSize: '0.8rem' }}>
+                    {order.strategyName || 'Manual'} ({order.confidence}%)
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+          {orders.length === 0 && <p style={{ color: 'var(--text-secondary)', padding: '40px', textAlign: 'center' }}>No orders found.</p>}
+        </div>
       </div>
     </div>
   );

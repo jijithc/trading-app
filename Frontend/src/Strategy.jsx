@@ -525,74 +525,124 @@ const Strategy = () => {
               </div>
             ) : (
               <div className="table-responsive">
-                <table className="table">
-                  <thead>
-                    <tr>
-                      <th>Engine / Source</th>
-                      <th>Schedule (Start-End)</th>
-                      <th>Rule Parameters</th>
-                      <th>Status</th>
-                      <th>Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {strategies.map((s) => (
-                      <tr key={s.id}>
-                        <td>
-                          <div style={{ fontWeight: 'bold', color: 'white', fontSize: '1.1rem' }}>{s.name}</div>
-                          <div style={{ fontSize: '0.75rem', color: 'var(--accent)' }}>
-                            {s.stockSource} (Top {s.maxStocks})
-                          </div>
-                        </td>
-                        <td>
-                          <div style={{ fontSize: '0.9rem' }}>{s.scheduledTime} - {s.endTime}</div>
-                          {s.lastRunDate && (
-                            <div style={{ fontSize: '0.7rem', color: 'var(--text-secondary)' }}>
-                              Last: {new Date(s.lastRunDate).toLocaleDateString()}
-                            </div>
-                          )}
-                        </td>
-                        <td>
-                          <div style={{ fontSize: '0.85rem' }}>
-                            <span className={s.type === 'Buy' ? 'text-success' : 'text-danger'}>{s.type}</span>
-                            {s.quantity ? ` ${s.quantity} Qty` : s.allocationLimit ? ` ₹${s.allocationLimit} Per Stock` : ''}
-                            {s.totalAmount ? ` (₹${s.totalAmount} Max)` : ' (Auto)'}
-                          </div>
-                          <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
-                            Entry: {s.entryPrice}x | Tgt: {s.targetPrice}%
-                          </div>
-                        </td>
-                        <td>
-                          <button
-                            onClick={() => toggleStatus(s)}
-                            className={s.isActive ? 'text-success' : 'text-secondary'}
-                            style={{
-                              fontSize: '0.75rem',
-                              border: '1px solid currentColor',
-                              padding: '2px 10px',
-                              borderRadius: '12px',
-                              background: 'transparent',
-                              cursor: 'pointer',
-                              fontWeight: 'bold'
-                            }}
-                          >
-                            {s.isActive ? 'ACTIVE' : 'PAUSED'}
-                          </button>
-                        </td>
-                        <td style={{ padding: '15px' }}>
-                          <div style={{ display: 'flex', gap: '10px' }}>
-                            <button onClick={() => handleEditClick(s)} className="btn btn-primary" title="View / Edit" style={{ padding: '8px', flex: 1, display: 'flex', justifyContent: 'center' }}>
-                              <Eye size={18} />
-                            </button>
-                            <button onClick={() => fetchLogs(s.id)} className="btn btn-outline" title="AI Logs" style={{ padding: '8px', flex: 1, display: 'flex', justifyContent: 'center' }}>
-                              <Activity size={18} />
-                            </button>
-                          </div>
-                        </td>
+                <div className="desktop-only">
+                  <table className="table">
+                    <thead>
+                      <tr>
+                        <th>Engine / Source</th>
+                        <th>Schedule (Start-End)</th>
+                        <th>Rule Parameters</th>
+                        <th>Status</th>
+                        <th>Action</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody>
+                      {strategies.map((s) => (
+                        <tr key={s.id}>
+                          <td>
+                            <div style={{ fontWeight: 'bold', color: 'white', fontSize: '1.1rem' }}>{s.name}</div>
+                            <div style={{ fontSize: '0.75rem', color: 'var(--accent)' }}>
+                              {s.stockSource} (Top {s.maxStocks})
+                            </div>
+                          </td>
+                          <td>
+                            <div style={{ fontSize: '0.9rem' }}>{s.scheduledTime} - {s.endTime}</div>
+                            {s.lastRunDate && (
+                              <div style={{ fontSize: '0.7rem', color: 'var(--text-secondary)' }}>
+                                Last: {new Date(s.lastRunDate).toLocaleDateString()}
+                              </div>
+                            )}
+                          </td>
+                          <td>
+                            <div style={{ fontSize: '0.85rem' }}>
+                              <span className={s.type === 'Buy' ? 'text-success' : 'text-danger'}>{s.type}</span>
+                              {s.quantity ? ` ${s.quantity} Qty` : s.allocationLimit ? ` ₹${s.allocationLimit} Per Stock` : ''}
+                              {s.totalAmount ? ` (₹${s.totalAmount} Max)` : ' (Auto)'}
+                            </div>
+                            <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
+                              Entry: {s.entryPrice}x | Tgt: {s.targetPrice}%
+                            </div>
+                          </td>
+                          <td>
+                            <button
+                              onClick={() => toggleStatus(s)}
+                              className={s.isActive ? 'text-success' : 'text-secondary'}
+                              style={{
+                                fontSize: '0.75rem',
+                                border: '1px solid currentColor',
+                                padding: '2px 10px',
+                                borderRadius: '12px',
+                                background: 'transparent',
+                                cursor: 'pointer',
+                                fontWeight: 'bold'
+                              }}
+                            >
+                              {s.isActive ? 'ACTIVE' : 'PAUSED'}
+                            </button>
+                          </td>
+                          <td style={{ padding: '15px' }}>
+                            <div style={{ display: 'flex', gap: '10px' }}>
+                              <button onClick={() => handleEditClick(s)} className="btn btn-primary" title="View / Edit" style={{ padding: '8px', flex: 1, display: 'flex', justifyContent: 'center' }}>
+                                <Eye size={18} />
+                              </button>
+                              <button onClick={() => fetchLogs(s.id)} className="btn btn-outline" title="AI Logs" style={{ padding: '8px', flex: 1, display: 'flex', justifyContent: 'center' }}>
+                                <Activity size={18} />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+
+                <div className="mobile-only card-view">
+                  {strategies.map((s) => (
+                    <div key={s.id} className="mobile-table-card">
+                      <div className="card-row">
+                        <div>
+                          <div style={{ fontWeight: 'bold', color: 'var(--accent)', fontSize: '1.1rem' }}>{s.name}</div>
+                          <div style={{ fontSize: '0.7rem', color: 'var(--text-secondary)' }}>{s.stockSource}</div>
+                        </div>
+                        <button
+                          onClick={() => toggleStatus(s)}
+                          className={s.isActive ? 'text-success' : 'text-secondary'}
+                          style={{
+                            fontSize: '0.65rem',
+                            border: '1px solid currentColor',
+                            padding: '2px 8px',
+                            borderRadius: '10px',
+                            background: 'transparent',
+                            cursor: 'pointer',
+                            fontWeight: 'bold'
+                          }}
+                        >
+                          {s.isActive ? 'ACTIVE' : 'PAUSED'}
+                        </button>
+                      </div>
+                      <div className="card-row" style={{ marginTop: '10px' }}>
+                        <div>
+                          <span className="label">Schedule</span>
+                          <div className="value" style={{ fontSize: '0.85rem' }}>{s.scheduledTime} - {s.endTime}</div>
+                        </div>
+                        <div style={{ textAlign: 'right' }}>
+                          <span className="label">Rules</span>
+                          <div className="value" style={{ fontSize: '0.85rem' }}>
+                            <span className={s.type === 'Buy' ? 'text-success' : 'text-danger'}>{s.type}</span> | T:{s.targetPrice}%
+                          </div>
+                        </div>
+                      </div>
+                      <div style={{ display: 'flex', gap: '8px', marginTop: '12px', paddingTop: '12px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+                        <button onClick={() => handleEditClick(s)} className="btn btn-primary" style={{ flex: 1, padding: '6px', fontSize: '0.8rem', gap: '4px' }}>
+                          <Eye size={14} /> EDIT
+                        </button>
+                        <button onClick={() => fetchLogs(s.id)} className="btn btn-outline" style={{ flex: 1, padding: '6px', fontSize: '0.8rem', gap: '4px' }}>
+                          <Activity size={14} /> LOGS
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             )}
           </div>
@@ -899,163 +949,159 @@ const Strategy = () => {
           </div>
         ) : (
           <div className="table-responsive">
-            <table className="table">
-              <thead>
-                <tr>
-                  <th>Date</th>
-                  <th>Strategy Name</th>
-                  <th style={{ textAlign: 'center' }}>Stocks Handled</th>
-                  <th style={{ textAlign: 'right' }}>Booked P&L</th>
-                  <th style={{ textAlign: 'center' }}>Profitable Trades</th>
-                  <th style={{ textAlign: 'right' }}>Total Money Used & Progress</th>
-                </tr>
-              </thead>
-              <tbody>
-                {reportItems.length === 0 ? (
-                  <tr><td colSpan="6" style={{ textAlign: 'center', padding: '20px' }}>No data</td></tr>
-                ) : (
-                  reportItems.map((r, i) => {
-                    const gainPerc = r.realizedInvested > 0 ? ((r.realizedPnl / r.realizedInvested) * 100).toFixed(2) : 0;
-                    const totalMoneyUsed = r.realizedInvested + r.leftInvestedValue;
-                    const usedPerc = r.strategyTotalAmount > 0 ? ((totalMoneyUsed / r.strategyTotalAmount) * 100).toFixed(1) : 0;
-                    
-                    return (
-                      <React.Fragment key={i}>
-                        <tr onClick={() => setExpandedRows(prev => ({...prev, [r.key]: !prev[r.key]}))} style={{ cursor: 'pointer', background: expandedRows[r.key] ? 'rgba(255,255,255,0.05)' : 'transparent' }}>
-                          <td style={{ fontWeight: 'bold', borderBottom: expandedRows[r.key] ? 'none' : '' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                              <span style={{ display: 'inline-block', width: '20px', color: 'var(--accent)' }}>{expandedRows[r.key] ? '▼' : '▶'}</span>
-                              {r.date}
-                              <button 
-                                 onClick={(e) => handleRefreshRow(e, r.key)} 
-                                 style={{ background: 'transparent', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer', outline: 'none', padding: '2px', display: 'flex' }}
-                                 title="Refetch and recalculate data"
-                              >
-                                 <RefreshCw size={14} className={refreshingRows[r.key] ? 'animate-spin' : ''} />
-                              </button>
-                            </div>
-                          </td>
-                          <td style={{ color: 'var(--accent)', fontWeight: 'bold', borderBottom: expandedRows[r.key] ? 'none' : '' }}>{r.strategyName}</td>
-                          <td style={{ textAlign: 'center', borderBottom: expandedRows[r.key] ? 'none' : '' }}><span className="badge bg-secondary">{r.transactionsCount}</span></td>
-                          <td className={r.realizedPnl >= 0 ? 'text-success' : 'text-danger'} style={{ fontWeight: 'bold', textAlign: 'right', borderBottom: expandedRows[r.key] ? 'none' : '' }}>
-                              {r.realizedPnl >= 0 ? '+' : ''}₹{r.realizedPnl.toFixed(2)} 
-                              <span style={{ fontSize: '0.75rem', opacity: 0.8, marginLeft: '6px' }}>
-                                  ({gainPerc}%)
-                              </span>
-                          </td>
-                          <td style={{ textAlign: 'center', borderBottom: expandedRows[r.key] ? 'none' : '' }}>
-                              <span className="text-success" style={{ fontWeight: 'bold' }}>{r.profitBookedCount}</span>
-                              <span style={{ fontSize: '0.75rem', opacity: 0.5, marginLeft: '4px' }}>out of {r.transactionsCount}</span>
-                          </td>
-                          <td style={{ textAlign: 'right', borderBottom: expandedRows[r.key] ? 'none' : '' }}>
-                              <div style={{ fontWeight: 'bold', color: 'white' }}>₹{(totalMoneyUsed).toFixed(2)}</div>
-                              {r.strategyTotalAmount > 0 && (
-                                  <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
-                                      {usedPerc}% of ₹{r.strategyTotalAmount} Limit
-                                      <div style={{ width: '100%', background: 'rgba(255,255,255,0.1)', height: '4px', borderRadius: '2px', marginTop: '4px' }}>
-                                          <div style={{ width: `${Math.min(usedPerc, 100)}%`, background: usedPerc > 90 ? 'var(--danger)' : 'var(--accent)', height: '100%', borderRadius: '2px' }}></div>
-                                      </div>
-                                  </div>
-                              )}
-                              {r.strategyTotalAmount === 0 && (
-                                  <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>No Budget Limit</div>
-                              )}
-                          </td>
-                        </tr>
-                        {expandedRows[r.key] && (
-                          <tr style={{ background: 'rgba(0,0,0,0.3)' }}>
-                            <td colSpan="6" style={{ padding: '0' }}>
-                               <div style={{ padding: '15px 15px 25px 40px', borderLeft: '4px solid var(--accent)' }}>
-                                 <h4 style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '10px', textTransform: 'uppercase' }}>Individual Transactions for {r.date}</h4>
-                                 <table className="table" style={{ background: 'transparent', margin: 0, fontSize: '0.85rem' }}>
-                                   <thead>
-                                      <tr>
-                                        <th style={{ padding: '8px', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>Time</th>
-                                        <th style={{ padding: '8px', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>Symbol</th>
-                                        <th style={{ padding: '8px', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>Status</th>
-                                        <th style={{ padding: '8px', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>SL / Est. Loss</th>
-                                        <th style={{ padding: '8px', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>Traded Price</th>
-                                        <th style={{ padding: '8px', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>Target / Est. Profit</th>
-                                        <th style={{ padding: '8px', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>Qty</th>
-                                        <th style={{ padding: '8px', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>Total Amount</th>
-                                        <th style={{ padding: '8px', borderBottom: '1px solid rgba(255,255,255,0.1)', textAlign: 'right' }}>Current P&L</th>
-                                      </tr>
-                                   </thead>
-                                   <tbody>
-                                      {r.transactions.map((t, idx) => {
-                                         const stockInvested = (t.quantity || 0) * (t.entryPrice || 0);
-                                         const stockPerc = r.strategyTotalAmount > 0 ? ((stockInvested / r.strategyTotalAmount) * 100).toFixed(1) : 0;
-                                         const apprecPerc = (t.targetPrice > 0 && t.entryPrice > 0) ? (Math.abs(t.targetPrice - t.entryPrice) / t.entryPrice * 100).toFixed(2) : 0;
-                                         const slPerc = (t.stopLossPrice > 0 && t.entryPrice > 0) ? (Math.abs(t.stopLossPrice - t.entryPrice) / t.entryPrice * 100).toFixed(2) : 0;
-                                         return (
-                                         <tr key={idx} style={{ background: 'transparent' }}>
-                                             <td style={{ padding: '8px', borderBottom: '1px solid rgba(255,255,255,0.05)', color: 'var(--text-secondary)' }}>
-                                                 {(() => {
-                                                    const date = new Date(t.executionDate);
-                                                    return isNaN(date.getTime()) ? 'N/A' : date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-                                                 })()}
-                                             </td>
-                                             <td style={{ padding: '8px', borderBottom: '1px solid rgba(255,255,255,0.05)', fontWeight: 'bold' }}>
-                                                <div 
-                                                  onClick={() => setSelectedTrade(t)}
-                                                  style={{ color: 'var(--accent)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
-                                                  title="Click to view intraday chart"
-                                                >
-                                                   <BarChart2 size={14} />
-                                                   {t.symbol}
-                                                </div>
-                                             </td>
-                                            <td style={{ padding: '8px', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                                                <span className={`badge ${t.status === 'Success' ? 'bg-success' : (t.status === 'Active Trade' ? 'bg-warning' : 'bg-danger')}`} style={{ fontSize: '0.7rem' }}>
-                                                  {t.status.toUpperCase()}
-                                                </span>
-                                            </td>
-                                            <td style={{ padding: '8px', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                                                {t.stopLossPrice > 0 ? (
-                                                  <div>
-                                                    <div>₹{t.stopLossPrice.toFixed(2)} <span style={{ fontSize: '0.7rem', opacity: 0.6 }}>({slPerc}%)</span></div>
-                                                    <div style={{ fontSize: '0.7rem', color: 'var(--danger)', opacity: 0.8 }}>
-                                                      -₹{Math.abs((t.stopLossPrice - t.entryPrice) * t.quantity).toFixed(2)}
-                                                    </div>
-                                                  </div>
-                                                ) : 'Auto / Trailing'}
-                                             </td>
-                                            <td style={{ padding: '8px', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>₹{(t.entryPrice || 0).toFixed(2)}</td>
-                                            <td style={{ padding: '8px', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                                                {t.targetPrice > 0 ? (
-                                                    <div>
-                                                        <div>₹{t.targetPrice.toFixed(2)} <span style={{ fontSize: '0.7rem', opacity: 0.6 }}>({apprecPerc}%)</span></div>
-                                                        <div style={{ fontSize: '0.7rem', color: 'var(--success)', opacity: 0.8 }}>
-                                                          +₹{Math.abs((t.targetPrice - t.entryPrice) * t.quantity).toFixed(2)}
-                                                        </div>
-                                                    </div>
-                                                ) : 'Auto / Trailing'}
-                                            </td>
-                                            <td style={{ padding: '8px', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>{t.quantity}</td>
-                                            <td style={{ padding: '8px', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                                                <div>₹{stockInvested.toFixed(2)}</div>
-                                                <div style={{ color: 'var(--text-secondary)', fontSize: '0.75rem' }}>
-                                                    {r.strategyTotalAmount > 0 ? `(${stockPerc}% of Limit)` : ''}
-                                                </div>
-                                            </td>
-                                            <td className={t.profitLoss > 0 ? 'text-success' : (t.profitLoss < 0 ? 'text-danger' : '')} style={{ padding: '8px', borderBottom: '1px solid rgba(255,255,255,0.05)', fontWeight: 'bold', textAlign: 'right' }}>
-                                                {t.profitLoss > 0 ? '+' : ''}₹{t.profitLoss.toFixed(2)}
-                                            </td>
-                                         </tr>
-                                         );
-                                      })}
-                                   </tbody>
-                                 </table>
-                               </div>
+            <div className="desktop-only">
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Strategy Name</th>
+                    <th style={{ textAlign: 'center' }}>Stocks Handled</th>
+                    <th style={{ textAlign: 'right' }}>Booked P&L</th>
+                    <th style={{ textAlign: 'center' }}>Profitable Trades</th>
+                    <th style={{ textAlign: 'right' }}>Total Money Used & Progress</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {reportItems.length === 0 ? (
+                    <tr><td colSpan="6" style={{ textAlign: 'center', padding: '20px' }}>No data</td></tr>
+                  ) : (
+                    reportItems.map((r, i) => {
+                      const gainPerc = r.realizedInvested > 0 ? ((r.realizedPnl / r.realizedInvested) * 100).toFixed(2) : 0;
+                      const totalMoneyUsed = r.realizedInvested + r.leftInvestedValue;
+                      const usedPerc = r.strategyTotalAmount > 0 ? ((totalMoneyUsed / r.strategyTotalAmount) * 100).toFixed(1) : 0;
+                      
+                      return (
+                        <React.Fragment key={i}>
+                          <tr onClick={() => setExpandedRows(prev => ({...prev, [r.key]: !prev[r.key]}))} style={{ cursor: 'pointer', background: expandedRows[r.key] ? 'rgba(255,255,255,0.05)' : 'transparent' }}>
+                            <td style={{ fontWeight: 'bold', borderBottom: expandedRows[r.key] ? 'none' : '' }}>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <span style={{ display: 'inline-block', width: '20px', color: 'var(--accent)' }}>{expandedRows[r.key] ? '▼' : '▶'}</span>
+                                {r.date}
+                                <button 
+                                  onClick={(e) => handleRefreshRow(e, r.key)} 
+                                  style={{ background: 'transparent', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer', outline: 'none', padding: '2px', display: 'flex' }}
+                                  title="Refetch and recalculate data"
+                                >
+                                  <RefreshCw size={14} className={refreshingRows[r.key] ? 'animate-spin' : ''} />
+                                </button>
+                              </div>
+                            </td>
+                            <td style={{ color: 'var(--accent)', fontWeight: 'bold', borderBottom: expandedRows[r.key] ? 'none' : '' }}>{r.strategyName}</td>
+                            <td style={{ textAlign: 'center', borderBottom: expandedRows[r.key] ? 'none' : '' }}><span className="badge bg-secondary">{r.transactionsCount}</span></td>
+                            <td className={r.realizedPnl >= 0 ? 'text-success' : 'text-danger'} style={{ fontWeight: 'bold', textAlign: 'right', borderBottom: expandedRows[r.key] ? 'none' : '' }}>
+                                {r.realizedPnl >= 0 ? '+' : ''}₹{r.realizedPnl.toFixed(2)} 
+                                <span style={{ fontSize: '0.75rem', opacity: 0.8, marginLeft: '6px' }}>
+                                    ({gainPerc}%)
+                                </span>
+                            </td>
+                            <td style={{ textAlign: 'center', borderBottom: expandedRows[r.key] ? 'none' : '' }}>
+                                <span className="text-success" style={{ fontWeight: 'bold' }}>{r.profitBookedCount}</span>
+                                <span style={{ fontSize: '0.75rem', opacity: 0.5, marginLeft: '4px' }}>out of {r.transactionsCount}</span>
+                            </td>
+                            <td style={{ textAlign: 'right', borderBottom: expandedRows[r.key] ? 'none' : '' }}>
+                                <div style={{ fontWeight: 'bold', color: 'white' }}>₹{(totalMoneyUsed).toFixed(2)}</div>
+                                {r.strategyTotalAmount > 0 && (
+                                    <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
+                                        {usedPerc}% of ₹{r.strategyTotalAmount} Limit
+                                        <div style={{ width: '100%', background: 'rgba(255,255,255,0.1)', height: '4px', borderRadius: '2px', marginTop: '4px' }}>
+                                            <div style={{ width: `${Math.min(usedPerc, 100)}%`, background: usedPerc > 90 ? 'var(--danger)' : 'var(--accent)', height: '100%', borderRadius: '2px' }}></div>
+                                        </div>
+                                    </div>
+                                )}
                             </td>
                           </tr>
-                        )}
-                      </React.Fragment>
-                    );
-                  })
-                )}
-              </tbody>
-            </table>
+                          {expandedRows[r.key] && (
+                            <tr style={{ background: 'rgba(0,0,0,0.3)' }}>
+                              <td colSpan="6" style={{ padding: '0' }}>
+                                <div style={{ padding: '15px 15px 25px 40px', borderLeft: '4px solid var(--accent)' }}>
+                                  <h4 style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '10px', textTransform: 'uppercase' }}>Individual Transactions for {r.date}</h4>
+                                  <table className="table" style={{ background: 'transparent', margin: 0, fontSize: '0.85rem' }}>
+                                    <thead>
+                                      <tr>
+                                        <th>Time</th>
+                                        <th>Symbol</th>
+                                        <th>Status</th>
+                                        <th>Traded Price</th>
+                                        <th>Qty</th>
+                                        <th style={{ textAlign: 'right' }}>Current P&L</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      {r.transactions.map((t, idx) => (
+                                        <tr key={idx}>
+                                          <td>{new Date(t.executionDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</td>
+                                          <td style={{ fontWeight: 'bold', color: 'var(--accent)', cursor: 'pointer' }} onClick={() => setSelectedTrade(t)}>
+                                            <BarChart2 size={14} style={{ marginRight: '4px' }} /> {t.symbol}
+                                          </td>
+                                          <td>
+                                            <span className={`badge ${t.status === 'Success' ? 'bg-success' : (t.status === 'Active Trade' ? 'bg-warning' : 'bg-danger')}`}>
+                                              {t.status}
+                                            </span>
+                                          </td>
+                                          <td>₹{t.entryPrice?.toFixed(2)}</td>
+                                          <td>{t.quantity}</td>
+                                          <td className={t.profitLoss >= 0 ? 'text-success' : 'text-danger'} style={{ textAlign: 'right', fontWeight: 'bold' }}>
+                                            {t.profitLoss >= 0 ? '+' : ''}₹{t.profitLoss?.toFixed(2)}
+                                          </td>
+                                        </tr>
+                                      ))}
+                                    </tbody>
+                                  </table>
+                                </div>
+                              </td>
+                            </tr>
+                          )}
+                        </React.Fragment>
+                      );
+                    })
+                  )}
+                </tbody>
+              </table>
+            </div>
+
+            <div className="mobile-only card-view">
+              {reportItems.map((r, i) => {
+                const gainPerc = r.realizedInvested > 0 ? ((r.realizedPnl / r.realizedInvested) * 100).toFixed(1) : 0;
+                return (
+                  <div key={i} className="mobile-table-card" onClick={() => setExpandedRows(prev => ({...prev, [r.key]: !prev[r.key]}))}>
+                    <div className="card-row">
+                      <div>
+                        <div style={{ fontWeight: 'bold', fontSize: '1rem' }}>{r.strategyName}</div>
+                        <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>{r.date}</div>
+                      </div>
+                      <div style={{ textAlign: 'right' }}>
+                        <div className={r.realizedPnl >= 0 ? 'text-success' : 'text-danger'} style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>
+                          {r.realizedPnl >= 0 ? '+' : ''}₹{r.realizedPnl.toFixed(0)}
+                        </div>
+                        <div style={{ fontSize: '0.7rem', opacity: 0.7 }}>{gainPerc}%</div>
+                      </div>
+                    </div>
+                    
+                    {expandedRows[r.key] && (
+                      <div style={{ marginTop: '16px', paddingTop: '16px', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+                        {r.transactions.map((t, idx) => (
+                          <div key={idx} style={{ marginBottom: '12px', paddingBottom: '12px', borderBottom: idx < r.transactions.length - 1 ? '1px solid rgba(255,255,255,0.05)' : 'none' }}>
+                            <div className="card-row">
+                              <div style={{ fontWeight: 'bold', color: 'var(--accent)' }}>{t.symbol}</div>
+                              <div className={t.profitLoss >= 0 ? 'text-success' : 'text-danger'} style={{ fontWeight: 'bold' }}>
+                                {t.profitLoss >= 0 ? '+' : ''}₹{t.profitLoss.toFixed(1)}
+                              </div>
+                            </div>
+                            <div className="card-row" style={{ marginTop: '4px' }}>
+                              <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>{t.status}</span>
+                              <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>{t.quantity} @ ₹{t.entryPrice?.toFixed(1)}</span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    <div style={{ textAlign: 'center', fontSize: '0.7rem', color: 'var(--text-secondary)', marginTop: '8px' }}>
+                      {expandedRows[r.key] ? '▲ Tap to collapse' : '▼ Tap to view details'}
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
           </div>
         )}
       </div>
@@ -1071,124 +1117,126 @@ const Strategy = () => {
               <div style={{ padding: '50px', textAlign: 'center' }}>Loading internal logs...</div>
             ) : (
               <div className="custom-scrollbar" style={{ maxHeight: '600px', overflowY: 'auto', background: 'var(--panel-bg)', borderRadius: '8px', border: '1px solid var(--border)' }}>
-                <style>{`
-                  .custom-scrollbar::-webkit-scrollbar {
-                    width: 6px;
-                  }
-                  .custom-scrollbar::-webkit-scrollbar-track {
-                    background: rgba(0, 0, 0, 0.2);
-                    border-radius: 4px;
-                  }
-                  .custom-scrollbar::-webkit-scrollbar-thumb {
-                    background: rgba(255, 255, 255, 0.15);
-                    border-radius: 4px;
-                  }
-                  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-                    background: rgba(255, 255, 255, 0.3);
-                  }
-                `}</style>
-                <table style={{ width: '100%', fontSize: '0.85rem', textAlign: 'left', borderCollapse: 'collapse' }}>
-                  <thead style={{ position: 'sticky', top: 0, background: 'var(--panel-bg)', zIndex: 2, boxShadow: '0 1px 3px rgba(0,0,0,0.2)' }}>
-                    <tr>
-                      <th style={{ padding: '12px 15px', borderBottom: '1px solid var(--border)', width: '130px', cursor: 'pointer' }} onClick={() => setLogSortBy('time')}>
-                         Start Time
-                      </th>
-                      <th style={{ padding: '12px 15px', borderBottom: '1px solid var(--border)', width: '130px' }}>
-                         Last Execution {logSortBy === 'time' && '↓'}
-                      </th>
-                      {!logStrategyId && <th style={{ padding: '12px 15px', borderBottom: '1px solid var(--border)', width: '100px' }}>Strategy ID</th>}
-                      <th style={{ padding: '12px 15px', borderBottom: '1px solid var(--border)', width: '120px', cursor: 'pointer' }} onClick={() => setLogSortBy('symbol')}>
-                         Symbol {logSortBy === 'symbol' && '↕'}
-                      </th>
-                      <th style={{ padding: '12px 15px', borderBottom: '1px solid var(--border)', textAlign: 'right' }}>Price</th>
-                      <th style={{ padding: '12px 15px', borderBottom: '1px solid var(--border)', textAlign: 'right' }}>EMA20</th>
-                      <th style={{ padding: '12px 15px', borderBottom: '1px solid var(--border)', textAlign: 'right' }}>Support</th>
-                      <th style={{ padding: '12px 15px', borderBottom: '1px solid var(--border)', textAlign: 'right' }}>Resistance</th>
-                      <th style={{ padding: '12px 15px', borderBottom: '1px solid var(--border)', textAlign: 'right', whiteSpace: 'nowrap' }}>Volume</th>
-                      <th style={{ padding: '12px 15px', borderBottom: '1px solid var(--border)', textAlign: 'right', whiteSpace: 'nowrap' }}>Vol Avg</th>
-                      <th style={{ padding: '12px 15px', borderBottom: '1px solid var(--border)', width: '150px', textAlign: 'center' }}>Result</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {Object.keys(getParsedLogs()).length === 0 ? (
-                      <tr><td colSpan="10" style={{ padding: '30px', textAlign: 'center', opacity: 0.5 }}>No technical analysis events found recently...</td></tr>
-                    ) : (
-                      Object.entries(getParsedLogs()).map(([date, logs]) => (
-                        <React.Fragment key={date}>
-                          <tr style={{ background: 'rgba(59, 130, 246, 0.12)', borderBottom: '1px solid var(--border)' }}>
-                            <td colSpan={logStrategyId ? 10 : 11} style={{ padding: '10px 15px', color: 'var(--accent)', fontWeight: 'bold', fontSize: '0.9rem' }}>
-                              {logSortBy === 'symbol' ? (
-                                <span><Search size={14} style={{ display: 'inline', marginRight: '8px', verticalAlign: 'middle' }} />SYMBOL: {date}</span>
-                              ) : (
-                                <span><Calendar size={14} style={{ display: 'inline', marginRight: '8px', verticalAlign: 'middle' }} />
-                                {date === 'System Diagnostics' || date === 'Initial Logs' ? date : 
-                                  new Date(date).toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) === 'Invalid Date' ? date : new Date(date).toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
-                                }</span>
-                              )}
-                            </td>
-                          </tr>
-                          {logs.map((log) => {
-                            const hasStats = log.stats && Object.keys(log.stats).length > 2;
-                            return (
-                              <tr key={log.id} style={{ 
-                                borderBottom: '1px solid var(--border)', 
-                                background: log.isError ? 'rgba(239, 68, 68, 0.15)' : (log.opportunity === 'True' ? 'rgba(16, 185, 129, 0.15)' : 'rgba(59, 130, 246, 0.05)'),
-                                transition: 'all 0.3s ease',
-                                boxShadow: log.opportunity === 'True' ? 'inset 4px 0 0 var(--success)' : 'none'
-                              }}>
-                                <td style={{ padding: '12px 15px', whiteSpace: 'nowrap', opacity: 0.5, fontSize: '0.75rem', fontFamily: 'monospace' }}>{log.startTime ? log.startTime.split(' ')[1] : '-'}</td>
-                                <td style={{ padding: '12px 15px', whiteSpace: 'nowrap', opacity: 0.9, color: 'var(--accent)', fontWeight: 'bold', fontFamily: 'monospace' }}>{log.time || '-'}</td>
-                                {!logStrategyId && <td style={{ padding: '12px 15px', fontFamily: 'monospace', opacity: 0.5, fontSize: '0.8rem' }}>{log.strategy ? log.strategy.substring(0,8)+'...' : '-'}</td>}
-                                <td style={{ padding: '12px 15px', fontWeight: 'bold', color: 'var(--text)', fontSize: '1rem' }}>{log.symbol ? log.symbol.replace('.NS', '') : '-'}</td>
-                                
-                                {hasStats ? (
-                                  <>
-                                    <td style={{ padding: '12px 15px', textAlign: 'right', fontFamily: 'monospace', fontSize: '0.9rem' }}>{log.stats['Price'] || '-'}</td>
-                                    <td style={{ padding: '12px 15px', textAlign: 'right', fontFamily: 'monospace', fontSize: '0.9rem' }}>{log.stats['EMA20'] || '-'}</td>
-                                    <td style={{ padding: '12px 15px', textAlign: 'right', fontFamily: 'monospace', fontSize: '0.9rem' }}>{log.stats['Support'] || '-'}</td>
-                                    <td style={{ padding: '12px 15px', textAlign: 'right', fontFamily: 'monospace', fontSize: '0.9rem' }}>{log.stats['Resistance'] || '-'}</td>
-                                    <td style={{ padding: '12px 15px', textAlign: 'right', fontFamily: 'monospace', fontSize: '0.9rem' }}>{log.stats['Vol'] || '-'}</td>
-                                    <td style={{ padding: '12px 15px', textAlign: 'right', fontFamily: 'monospace', fontSize: '0.9rem' }}>{log.stats['VolAvg'] || '-'}</td>
-                                    
-                                    <td style={{ padding: '12px 15px', fontWeight: 'bold', textAlign: 'center', minWidth: '150px' }}>
-                                      {log.opportunity === 'True' ? (
-                                         <div style={{ 
-                                           color: '#fff', 
-                                           background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
-                                           padding: '8px 16px', 
-                                           borderRadius: '20px', 
-                                           fontWeight: '900',
-                                           display: 'inline-flex',
-                                           alignItems: 'center',
-                                           gap: '6px',
-                                           boxShadow: '0 4px 15px rgba(16, 185, 129, 0.4)',
-                                           fontSize: '0.75rem',
-                                           letterSpacing: '0.5px'
-                                         }}>
-                                           <CheckCircle size={14} /> BUY SIGNAL
-                                         </div>
-                                      ) : (
-                                         <span style={{ color: 'var(--error)', opacity: 0.9, fontWeight: 'bold', fontSize: '0.8rem', textTransform: 'uppercase' }}>
-                                           {log.reason || 'REJECTED'}
-                                         </span>
-                                      )}
-                                    </td>
-                                  </>
+                <div className="desktop-only">
+                  <table style={{ width: '100%', fontSize: '0.85rem', textAlign: 'left', borderCollapse: 'collapse' }}>
+                    <thead style={{ position: 'sticky', top: 0, background: 'var(--panel-bg)', zIndex: 2, boxShadow: '0 1px 3px rgba(0,0,0,0.2)' }}>
+                      <tr>
+                        <th style={{ padding: '12px 15px', borderBottom: '1px solid var(--border)', width: '130px', cursor: 'pointer' }} onClick={() => setLogSortBy('time')}>
+                           Start Time
+                        </th>
+                        <th style={{ padding: '12px 15px', borderBottom: '1px solid var(--border)', width: '130px' }}>
+                           Last Execution {logSortBy === 'time' && '↓'}
+                        </th>
+                        {!logStrategyId && <th style={{ padding: '12px 15px', borderBottom: '1px solid var(--border)', width: '100px' }}>Strategy ID</th>}
+                        <th style={{ padding: '12px 15px', borderBottom: '1px solid var(--border)', width: '120px', cursor: 'pointer' }} onClick={() => setLogSortBy('symbol')}>
+                           Symbol {logSortBy === 'symbol' && '↕'}
+                        </th>
+                        <th style={{ padding: '12px 15px', borderBottom: '1px solid var(--border)', textAlign: 'right' }}>Price</th>
+                        <th style={{ padding: '12px 15px', borderBottom: '1px solid var(--border)', textAlign: 'right' }}>EMA20</th>
+                        <th style={{ padding: '12px 15px', borderBottom: '1px solid var(--border)', textAlign: 'right' }}>Support</th>
+                        <th style={{ padding: '12px 15px', borderBottom: '1px solid var(--border)', textAlign: 'right' }}>Resistance</th>
+                        <th style={{ padding: '12px 15px', borderBottom: '1px solid var(--border)', textAlign: 'right', whiteSpace: 'nowrap' }}>Volume</th>
+                        <th style={{ padding: '12px 15px', borderBottom: '1px solid var(--border)', textAlign: 'right', whiteSpace: 'nowrap' }}>Vol Avg</th>
+                        <th style={{ padding: '12px 15px', borderBottom: '1px solid var(--border)', width: '150px', textAlign: 'center' }}>Result</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {Object.keys(getParsedLogs()).length === 0 ? (
+                        <tr><td colSpan="11" style={{ padding: '30px', textAlign: 'center', opacity: 0.5 }}>No technical analysis events found recently...</td></tr>
+                      ) : (
+                        Object.entries(getParsedLogs()).map(([date, logs]) => (
+                          <React.Fragment key={date}>
+                            <tr style={{ background: 'rgba(59, 130, 246, 0.12)', borderBottom: '1px solid var(--border)' }}>
+                              <td colSpan={logStrategyId ? 10 : 11} style={{ padding: '10px 15px', color: 'var(--accent)', fontWeight: 'bold', fontSize: '0.9rem' }}>
+                                {logSortBy === 'symbol' ? (
+                                  <span><Search size={14} style={{ display: 'inline', marginRight: '8px', verticalAlign: 'middle' }} />SYMBOL: {date}</span>
                                 ) : (
-                                  <td colSpan="7" style={{ padding: '12px 15px' }}>
-                                    <span style={{ color: log.isError ? 'var(--error)' : 'var(--text)', opacity: log.isError ? 1 : 0.8, fontSize: '0.9rem' }}>
-                                      {log.message || log.reason || 'System Notification'}
-                                    </span>
-                                  </td>
+                                  <span><Calendar size={14} style={{ display: 'inline', marginRight: '8px', verticalAlign: 'middle' }} />
+                                  {date}</span>
                                 )}
-                              </tr>
-                            );
-                          })}
-                        </React.Fragment>
-                      ))
-                    )}
-                  </tbody>
-                </table>
+                              </td>
+                            </tr>
+                            {logs.map((log) => {
+                              const hasStats = log.stats && Object.keys(log.stats).length > 2;
+                              return (
+                                <tr key={log.id} style={{ 
+                                  borderBottom: '1px solid var(--border)', 
+                                  background: log.isError ? 'rgba(239, 68, 68, 0.15)' : (log.opportunity === 'True' ? 'rgba(16, 185, 129, 0.15)' : 'rgba(59, 130, 246, 0.05)'),
+                                }}>
+                                  <td style={{ padding: '12px 15px', whiteSpace: 'nowrap', opacity: 0.5, fontSize: '0.75rem', fontFamily: 'monospace' }}>{log.startTime ? log.startTime.split(' ')[1] : '-'}</td>
+                                  <td style={{ padding: '12px 15px', whiteSpace: 'nowrap', opacity: 0.9, color: 'var(--accent)', fontWeight: 'bold', fontFamily: 'monospace' }}>{log.time || '-'}</td>
+                                  {!logStrategyId && <td style={{ padding: '12px 15px', fontFamily: 'monospace', opacity: 0.5, fontSize: '0.8rem' }}>{log.strategy ? log.strategy.substring(0,8)+'...' : '-'}</td>}
+                                  <td style={{ padding: '12px 15px', fontWeight: 'bold', color: 'var(--text)', fontSize: '1rem' }}>{log.symbol ? log.symbol.replace('.NS', '') : '-'}</td>
+                                  
+                                  {hasStats ? (
+                                    <>
+                                      <td style={{ padding: '12px 15px', textAlign: 'right', fontFamily: 'monospace', fontSize: '0.9rem' }}>{log.stats['Price'] || '-'}</td>
+                                      <td style={{ padding: '12px 15px', textAlign: 'right', fontFamily: 'monospace', fontSize: '0.9rem' }}>{log.stats['EMA20'] || '-'}</td>
+                                      <td style={{ padding: '12px 15px', textAlign: 'right', fontFamily: 'monospace', fontSize: '0.9rem' }}>{log.stats['Support'] || '-'}</td>
+                                      <td style={{ padding: '12px 15px', textAlign: 'right', fontFamily: 'monospace', fontSize: '0.9rem' }}>{log.stats['Resistance'] || '-'}</td>
+                                      <td style={{ padding: '12px 15px', textAlign: 'right', fontFamily: 'monospace', fontSize: '0.9rem' }}>{log.stats['Vol'] || '-'}</td>
+                                      <td style={{ padding: '12px 15px', textAlign: 'right', fontFamily: 'monospace', fontSize: '0.9rem' }}>{log.stats['VolAvg'] || '-'}</td>
+                                      <td style={{ padding: '12px 15px', fontWeight: 'bold', textAlign: 'center', minWidth: '150px' }}>
+                                        {log.opportunity === 'True' ? (
+                                           <div style={{ color: '#fff', background: 'var(--success)', padding: '4px 12px', borderRadius: '12px', fontSize: '0.7rem' }}>
+                                             BUY SIGNAL
+                                           </div>
+                                        ) : (
+                                           <span style={{ color: 'var(--error)', fontSize: '0.8rem' }}>{log.reason || 'REJECTED'}</span>
+                                        )}
+                                      </td>
+                                    </>
+                                  ) : (
+                                    <td colSpan="7" style={{ padding: '12px 15px' }}>{log.message || log.reason || '-'}</td>
+                                  )}
+                                </tr>
+                              );
+                            })}
+                          </React.Fragment>
+                        ))
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+
+                <div className="mobile-only">
+                  {Object.entries(getParsedLogs()).map(([date, logs]) => (
+                    <div key={date}>
+                      <div style={{ background: 'rgba(59, 130, 246, 0.2)', padding: '10px 15px', fontWeight: 'bold', fontSize: '0.9rem', position: 'sticky', top: 0, zIndex: 10 }}>
+                        {date}
+                      </div>
+                      {logs.map((log) => (
+                        <div key={log.id} style={{ 
+                          padding: '15px', 
+                          borderBottom: '1px solid var(--border)',
+                          background: log.isError ? 'rgba(239, 68, 68, 0.1)' : (log.opportunity === 'True' ? 'rgba(16, 185, 129, 0.1)' : 'transparent')
+                        }}>
+                          <div className="card-row">
+                            <span style={{ fontWeight: 'bold', fontSize: '1.2rem' }}>{log.symbol?.replace('.NS', '')}</span>
+                            <span style={{ fontSize: '0.8rem', color: 'var(--accent)', fontWeight: 'bold' }}>{log.time}</span>
+                          </div>
+                          {log.stats && Object.keys(log.stats).length > 2 ? (
+                            <div style={{ marginTop: '10px', fontSize: '0.85rem' }}>
+                              <div className="card-row">
+                                <span>Price: ₹{log.stats['Price']}</span>
+                                <span>Vol: {log.stats['Vol']}</span>
+                              </div>
+                              <div style={{ marginTop: '8px', paddingTop: '8px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+                                {log.opportunity === 'True' ? (
+                                  <div style={{ color: 'var(--success)', fontWeight: 'bold' }}>✓ BUY SIGNAL IDENTIFIED</div>
+                                ) : (
+                                  <div style={{ color: 'var(--error)', fontSize: '0.8rem' }}>✗ {log.reason || 'Rejected by AI'}</div>
+                                )}
+                              </div>
+                            </div>
+                          ) : (
+                            <div style={{ marginTop: '8px', fontSize: '0.85rem', opacity: 0.8 }}>{log.message || log.reason}</div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  ))}
+                </div>
               </div>
             )}
             <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'flex-end' }}>

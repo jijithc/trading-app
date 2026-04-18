@@ -146,8 +146,8 @@ export default function Trade() {
 
           {research && (
             <div className="glass-panel" style={{ animation: 'fadeIn 0.5s ease' }}>
-              <div className="research-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', paddingBottom: '24px', borderBottom: '1px solid var(--border)' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+              <div className="research-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', paddingBottom: '24px', borderBottom: '1px solid var(--border)', flexWrap: 'wrap', gap: '20px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '15px', flex: '1', minWidth: '250px' }}>
                   <div>
                     <h3 
                       style={{ fontSize: '2.2rem', margin: 0, cursor: 'pointer', color: 'var(--accent)', display: 'flex', alignItems: 'center', gap: '10px' }}
@@ -161,7 +161,7 @@ export default function Trade() {
                       )}
                       <button 
                         onClick={handleAddToWatchlist}
-                        className="btn btn-sm" 
+                        className="btn" 
                         style={{ padding: '2px 8px', fontSize: '0.7rem', display: 'flex', alignItems: 'center', gap: '4px', background: 'rgba(59, 130, 246, 0.1)', border: '1px solid var(--accent)', color: 'var(--accent)' }}
                       >
                         <Plus size={12} /> WATCHLIST
@@ -169,7 +169,7 @@ export default function Trade() {
                     </div>
                   </div>
                 </div>
-                <div style={{ textAlign: 'right' }}>
+                <div style={{ textAlign: window.innerWidth < 768 ? 'left' : 'right', width: window.innerWidth < 768 ? '100%' : 'auto' }}>
                   <div style={{
                     display: 'inline-block',
                     padding: '8px 16px',
@@ -209,12 +209,12 @@ export default function Trade() {
                 </div>
               </div>
 
-              <div className="trade-btn-container" style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
-                <div className="form-group" style={{ margin: 0, width: '130px', flexShrink: 0 }}>
+              <div className="trade-btn-container" style={{ display: 'flex', gap: '20px', alignItems: 'flex-end', flexWrap: 'wrap' }}>
+                <div className="form-group" style={{ margin: 0, width: '100%', maxWidth: '200px', flex: '1' }}>
                   <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>TRADE QUANTITY</label>
                   <input type="number" min="1" className="form-control" value={qty} onChange={e => setQty(e.target.value)} style={{ padding: '10px' }} />
                 </div>
-                <div style={{ flex: 1, display: 'flex', gap: '16px' }}>
+                <div style={{ flex: '2', display: 'flex', gap: '16px', width: '100%', minWidth: '280px' }}>
                   <button
                     className="btn btn-success"
                     style={{ flex: 1, padding: '14px', fontSize: '1.1rem', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px', fontWeight: 'bold' }}

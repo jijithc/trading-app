@@ -53,52 +53,46 @@ export default function Portfolio() {
 
   return (
     <div className="container">
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: '20px', marginBottom: '40px' }}>
+      <div className="mobile-card-grid" style={{ marginBottom: '40px' }}>
         {/* Main Performance Card */}
         <div className="glass-panel" style={{ 
-          padding: '30px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' 
+          padding: '24px', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: '20px', flexWrap: 'wrap'
         }}>
-          <div style={{ flex: 1, paddingRight: '30px' }}>
-            <h2 className="title" style={{ fontSize: '0.8rem', marginBottom: '8px', opacity: 0.6, textTransform: 'uppercase', letterSpacing: '1px' }}>Current Net Asset Value</h2>
-            <div style={{ fontSize: '3.8rem', fontWeight: '900', color: 'var(--success)', letterSpacing: '-2px', lineHeight: '1' }}>
+          <div style={{ flex: '1 1 300px' }}>
+            <h2 className="title" style={{ fontSize: '0.75rem', marginBottom: '8px', opacity: 0.6, textTransform: 'uppercase', letterSpacing: '1px' }}>Current Net Asset Value</h2>
+            <div style={{ fontSize: '3rem', fontWeight: '900', color: 'var(--success)', letterSpacing: '-1px', lineHeight: '1' }}>
               ₹{portfolio.totalCurrentValue?.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </div>
           </div>
 
           <div style={{ 
-            flex: 1, paddingLeft: '40px', borderLeft: '1px solid rgba(255,255,255,0.1)', 
-            display: 'flex', flexDirection: 'column', gap: '20px'
+            flex: '1 1 300px', paddingLeft: '20px', borderLeft: '1px solid rgba(255,255,255,0.1)', 
+            display: 'flex', flexDirection: 'row', justifyContent: 'space-between', gap: '20px', flexWrap: 'wrap'
           }}>
             <div>
-              <p style={{ color: 'var(--text-secondary)', fontSize: '0.75rem', marginBottom: '4px', textTransform: 'uppercase' }}>Invested</p>
-              <span style={{ fontSize: '1.4rem', fontWeight: '700', color: 'white' }}>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.7rem', marginBottom: '4px', textTransform: 'uppercase' }}>Invested</p>
+              <span style={{ fontSize: '1.2rem', fontWeight: '700', color: 'white' }}>
                 ₹{portfolio.totalInvested?.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </span>
             </div>
             <div>
-              <p style={{ color: 'var(--text-secondary)', fontSize: '0.75rem', marginBottom: '4px', textTransform: 'uppercase' }}>Total P&L</p>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.7rem', marginBottom: '4px', textTransform: 'uppercase' }}>Total P&L</p>
               <div style={{ 
-                fontSize: '1.4rem', fontWeight: '700', 
+                fontSize: '1.2rem', fontWeight: '700', 
                 color: portfolio.totalPnL >= 0 ? 'var(--success)' : 'var(--danger)' 
               }}>
                 {portfolio.totalPnL >= 0 ? '+' : ''}₹{portfolio.totalPnL?.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                <span style={{ fontSize: '0.9rem', marginLeft: '8px', opacity: 0.8 }}>
-                  ({portfolio.totalInvested > 0 ? ((portfolio.totalPnL / portfolio.totalInvested) * 100).toFixed(2) : '0.00'}%)
-                </span>
               </div>
             </div>
           </div>
         </div>
         
         {/* Balance Card */}
-        <div className="glass-panel" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '30px' }}>
+        <div className="glass-panel" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '24px' }}>
            <p style={{ color: 'var(--text-secondary)', fontSize: '0.75rem', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '1px' }}>Available Balance</p>
-           <div style={{ fontSize: '2.25rem', fontWeight: '800', color: 'var(--accent)', letterSpacing: '-1px' }}>
+           <div style={{ fontSize: '2rem', fontWeight: '800', color: 'var(--accent)', letterSpacing: '-1px' }}>
              ₹{portfolio.balance?.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
            </div>
-           <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '12px', fontStyle: 'italic' }}>
-             Ready to deploy
-           </p>
         </div>
       </div>
 
@@ -108,7 +102,8 @@ export default function Portfolio() {
             <Briefcase color="var(--accent)" />
             <h3 className="subtitle" style={{ margin: 0 }}>Current Broker Positions</h3>
           </div>
-          <div className="table-responsive">
+          
+          <div className="desktop-only table-responsive">
             <table className="table" style={{ tableLayout: 'fixed' }}>
               <thead>
                 <tr>
@@ -147,6 +142,37 @@ export default function Portfolio() {
               </tbody>
             </table>
           </div>
+
+          <div className="mobile-only card-view">
+            {portfolio.positions.map((pos, idx) => (
+              <div key={idx} className="mobile-table-card" onClick={() => setSelectedStock({ 
+                symbol: pos.symbol, 
+                currentPrice: pos.currentPrice,
+                quantity: pos.quantity,
+                entryPrice: pos.avgPrice
+              })}>
+                <div className="card-row">
+                  <span style={{ fontWeight: 'bold', color: 'var(--accent)', fontSize: '1.2rem' }}>{pos.symbol}</span>
+                  <div style={{ textAlign: 'right' }}>
+                    <div style={{ color: pos.valueChange >= 0 ? 'var(--success)' : 'var(--danger)', fontWeight: 'bold' }}>
+                      {pos.valueChange >= 0 ? '+' : ''}{pos.percChange?.toFixed(2)}%
+                    </div>
+                  </div>
+                </div>
+                <div className="card-row" style={{ marginTop: '12px' }}>
+                  <div>
+                    <span className="label">Invested</span>
+                    <div className="value">₹{pos.investedValue?.toLocaleString('en-IN')}</div>
+                  </div>
+                  <div style={{ textAlign: 'right' }}>
+                    <span className="label">Current</span>
+                    <div className="value">₹{pos.currentValue?.toLocaleString('en-IN')}</div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
           {portfolio.positions.length === 0 && <p style={{ color: 'var(--text-secondary)', padding: '20px', textAlign: 'center' }}>No open positions.</p>}
         </div>
 

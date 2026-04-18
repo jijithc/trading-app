@@ -445,49 +445,61 @@ export default function HotStocks() {
             </table>
           </div>
 
-          {/* Mobile Grid View (2 per row) */}
-          <div className="mobile-only hot-stocks-grid" style={{ gap: '8px' }}>
+          {/* Mobile Grid View */}
+          <div className="mobile-only mobile-card-grid">
             {sortedStocks.map((stock, idx) => {
               const isGainer = stock.change >= 0;
               const isSelected = selectedStocks.some(s => s.symbol === stock.symbol);
+              const qty = localQtys[stock.symbol] || tradeQty;
               return (
                 <div
                   key={idx}
-                  className="glass-panel"
+                  className="mobile-table-card"
                   style={{
-                    padding: '8px', transition: 'all 0.1s', cursor: 'pointer',
-                    border: isSelected ? '2px solid var(--accent)' : '1px solid var(--border)',
-                    background: isSelected ? 'rgba(59, 130, 246, 0.15)' : 'var(--panel-bg)',
-                    display: 'flex', flexDirection: 'column', gap: '6px'
+                    padding: '12px',
+                    border: isSelected ? '1px solid var(--accent)' : '1px solid rgba(255,255,255,0.05)',
+                    background: isSelected ? 'rgba(59, 130, 246, 0.1)' : 'rgba(255, 255, 255, 0.03)',
                   }}
                   onClick={() => toggleSelection(stock)}
                 >
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', minWidth: 0, gap: '2px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px', minWidth: 0 }}>
-                      <div style={{ flexShrink: 0, width: '12px', height: '12px', borderRadius: '2px', border: '1px solid var(--accent)', background: isSelected ? 'var(--accent)' : 'transparent' }} />
-                      <h3 style={{ fontSize: '0.85rem', fontWeight: 'bold', margin: 0, color: 'white', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  <div className="card-row">
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', minWidth: 0 }}>
+                      <div style={{ 
+                        flexShrink: 0, width: '16px', height: '16px', borderRadius: '4px', 
+                        border: '1px solid var(--accent)', 
+                        background: isSelected ? 'var(--accent)' : 'transparent',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center'
+                      }}>
+                        {isSelected && <div style={{ width: '8px', height: '8px', background: 'white', borderRadius: '1px' }} />}
+                      </div>
+                      <span style={{ fontWeight: 'bold', fontSize: '1rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                         {stock.symbol.replace('.NS', '')}
-                      </h3>
+                      </span>
                     </div>
                     <div style={{
-                      flexShrink: 0, padding: '0px 3px', borderRadius: '3px', background: isGainer ? 'rgba(16, 185, 129, 0.2)' : 'rgba(239, 68, 68, 0.2)',
-                      color: isGainer ? 'var(--success)' : 'var(--danger)', fontWeight: '900', fontSize: '0.6rem', whiteSpace: 'nowrap'
+                      padding: '2px 6px', borderRadius: '4px', background: isGainer ? 'rgba(16, 185, 129, 0.15)' : 'rgba(239, 68, 68, 0.15)',
+                      color: isGainer ? 'var(--success)' : 'var(--danger)', fontWeight: 'bold', fontSize: '0.75rem'
                     }}>
                       {isGainer ? '+' : ''}{stock.percentChange?.toFixed(1)}%
                     </div>
                   </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <div style={{ fontSize: '1rem', fontWeight: '800', color: 'white' }}>₹{(stock.price || 0).toFixed(0)}</div>
-                    <input
-                      type="number" min="1" className="form-control"
-                      style={{ padding: '0 2px', width: '35px', background: 'rgba(0,0,0,0.5)', fontSize: '0.7rem', height: '18px', border: 'none' }}
-                      value={localQtys[stock.symbol] || tradeQty} onClick={e => e.stopPropagation()}
-                      onChange={e => setLocalQtys({ ...localQtys, [stock.symbol]: Number(e.target.value) })}
-                    />
+
+                  <div className="card-row" style={{ marginTop: '12px' }}>
+                    <div style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>₹{(stock.price || 0).toFixed(1)}</div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      <span className="label" style={{ fontSize: '0.65rem' }}>Qty:</span>
+                      <input
+                        type="number" min="1" className="form-control"
+                        style={{ padding: '0 4px', width: '45px', background: 'rgba(0,0,0,0.3)', fontSize: '0.8rem', height: '24px', textAlign: 'center' }}
+                        value={qty} onClick={e => e.stopPropagation()}
+                        onChange={e => setLocalQtys({ ...localQtys, [stock.symbol]: Number(e.target.value) })}
+                      />
+                    </div>
                   </div>
-                  <div style={{ display: 'flex', gap: '2px' }}>
-                    <button className="btn btn-success" onClick={(e) => handleIndividualTrade(stock, e, 'Buy')} disabled={trading} style={{ flex: 1, padding: '0', fontSize: '0.65rem', height: '22px' }}>B</button>
-                    <button className="btn btn-danger" onClick={(e) => handleIndividualTrade(stock, e, 'Sell')} disabled={trading} style={{ flex: 1, padding: '0', fontSize: '0.65rem', height: '22px' }}>S</button>
+
+                  <div style={{ display: 'flex', gap: '8px', marginTop: '12px', paddingTop: '12px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+                    <button className="btn btn-success" onClick={(e) => handleIndividualTrade(stock, e, 'Buy')} disabled={trading} style={{ flex: 1, padding: '4px', fontSize: '0.8rem' }}>BUY</button>
+                    <button className="btn btn-danger" onClick={(e) => handleIndividualTrade(stock, e, 'Sell')} disabled={trading} style={{ flex: 1, padding: '4px', fontSize: '0.8rem' }}>SELL</button>
                   </div>
                 </div>
               );
