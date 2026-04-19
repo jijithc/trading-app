@@ -456,7 +456,6 @@ export default function HotStocks() {
                   key={idx}
                   className="mobile-table-card"
                   style={{
-                    padding: '12px',
                     border: isSelected ? '1px solid var(--accent)' : '1px solid rgba(255,255,255,0.05)',
                     background: isSelected ? 'rgba(59, 130, 246, 0.1)' : 'rgba(255, 255, 255, 0.03)',
                   }}

@@ -61,7 +61,7 @@ body {
 /* Mobile Card Grid Helper */
 .mobile-card-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr) !important;
+  grid-template-columns: 1fr !important;
   gap: 12px !important;
 }
 
@@ -153,32 +153,29 @@ body {
   .hot-stocks-grid {
     grid-template-columns: repeat(2, 1fr) !important;
   }
-  
-  .mobile-card-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
 }
 
 .card-view {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 8px; /* Further reduced gap */
+  width: 100%;
 }
 
 .mobile-table-card {
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 16px;
-  margin-bottom: 12px;
+  border-radius: 8px;
+  padding: 8px 10px; /* Reduced paddings */
+  margin-bottom: 0px; /* Removed margin, using gap from flex parent */
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .mobile-table-card .card-row {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
 }
 
 .mobile-table-card .card-row:last-child {
@@ -363,7 +360,8 @@ input[type="checkbox"] {
   }
 
   .mobile-only {
-    display: inline-block !important;
+    display: block !important;
+    width: 100%;
   }
 
   .desktop-only {

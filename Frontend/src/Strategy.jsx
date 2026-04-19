@@ -1207,7 +1207,7 @@ const Strategy = () => {
                       </div>
                       {logs.map((log) => (
                         <div key={log.id} style={{ 
-                          padding: '15px', 
+                          padding: '10px 12px', 
                           borderBottom: '1px solid var(--border)',
                           background: log.isError ? 'rgba(239, 68, 68, 0.1)' : (log.opportunity === 'True' ? 'rgba(16, 185, 129, 0.1)' : 'transparent')
                         }}>
